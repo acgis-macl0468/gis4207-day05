@@ -8,6 +8,7 @@
 # Copyright:   (c) Jake MacLean 2018
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
+import sys
 import os
 scriptFolder = os.path.dirname(os.path.abspath(__file__))
 os.chdir(scriptFolder)
@@ -15,16 +16,19 @@ os.chdir(scriptFolder)
 
 import arcpy
 
-rows = arcpy.SearchCursor(r"..\..\..\Data\Canada\Can_Mjr_Cities.shp",
-                          "",
-                          "",
-                          "Name; Prov")
+fc = r"..\..\..\Data\Canada\Can_Mjr_Cities.shp"
+fieldList = ["Name", "Prov"]
+rowCount = 1
+cursor = arcpy.da.SearchCursor(fc, fieldList)
+rowCount = 1
+for row in cursor:
 
-print "Name, Prov"
-n = 1
-for row in rows:
-    n += 1
+    rowCount += 1
+
     fmt = "%s , %s"
-    print fmt % (row.Name, row.Prov)
 
-print "There are", n,"cities in the above list."
+    print fmt % (row[0],row[1])
+
+
+print "There are", rowCount,"cities in the above list."
+
